@@ -1,14 +1,14 @@
 {
-  "name": "cybersim",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "A web-based platform where users can interact with security challenges in a safe, simulated environment.",
-  "main": "backend/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
