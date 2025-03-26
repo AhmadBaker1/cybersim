@@ -2,7 +2,7 @@
   "name": "cybersim",
   "version": "1.0.0",
   "description": "A web-based platform where users can interact with security challenges in a safe, simulated environment.",
-  "main": "index.js",
+  "main": "backend/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
