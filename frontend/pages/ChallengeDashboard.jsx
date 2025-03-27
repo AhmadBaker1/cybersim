@@ -22,8 +22,8 @@ export default function ChallengeDashboard() {
                     }
                 );
                 setUser(userRes.data.user);
-                // https://cybersim-backend.onrender.com/api/ctf/challenges
-                const challengesRes = await axios.get("http://localhost:5000/api/ctf/challenge",
+                // https://cybersim-backend.onrender.com/api/ctf/levels
+                const challengesRes = await axios.get("http://localhost:5000/api/challenges/levels",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

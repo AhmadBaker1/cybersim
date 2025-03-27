@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
-app.use('/api/ctf', ctfRoutes);
+app.use('/api/challenges', ctfRoutes);
 
 app.get('/', (req, res) => {
   res.send('Welcome to CyberSim Backend');
