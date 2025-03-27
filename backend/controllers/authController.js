@@ -74,4 +74,22 @@ const login = async (req, res) => {
     }
 };
 
-export { signup, login };
+const getProfile = async (req, res) => {
+    try {
+      const result = await pool.query(
+        'SELECT id, username, email, score FROM users WHERE id = $1',
+        [req.userId] // from token middleware
+      );
+  
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      res.json({ user: result.rows[0] });
+    } catch (err) {
+      console.error('Profile Error:', err);
+      res.status(500).json({ error: 'Failed to fetch profile' });
+    }
+  };
+
+export { signup, login, getProfile };
