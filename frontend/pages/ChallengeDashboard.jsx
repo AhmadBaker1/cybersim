@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar2 from "../src/components/Navbar2";
+import { useNavigate } from "react-router-dom";
 
 export default function ChallengeDashboard() {
     const [user, setUser] = useState(null);
     const [challenges, setChallenges] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -61,7 +64,8 @@ export default function ChallengeDashboard() {
               {challenges.map((challenge) => (
                 <div
                   key={challenge.id}
-                  className={`rounded-lg p-6 shadow-md text-white ${
+                  onClick={() => navigate(`/challenge/${challenge.name.toLowerCase().replace(" ", "-")}`)}
+                  className={`cursor-pointer rounded-lg p-6 shadow-md text-white transition-transform hover:scale-105 ${
                     challenge.difficulty === "Easy"
                       ? "bg-gradient-to-br from-green-500 to-green-700"
                       : challenge.difficulty === "Medium"
