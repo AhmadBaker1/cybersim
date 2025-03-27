@@ -1,23 +1,23 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-
-import pool from './db.js';
+import authRoutes from './routes/authRoutes.js';
+import ctfRoutes from './routes/ctfRoutes.js';
 
 dotenv.config();
-
 const app = express();
+const PORT = process.env.PORT || 5000;
+
 app.use(cors());
 app.use(express.json());
 
-app.get("/", async (req, res) => {
-    const time = await pool.query("SELECT NOW()");
-    res.json({ message: "Cybersecurity API running", time: time.rows[0] });
-});
+app.use('/api/auth', authRoutes);
+app.use('/api/ctf', ctfRoutes);
 
-const PORT = process.env.PORT || 5000;
+app.get('/', (req, res) => {
+  res.send('Welcome to CyberSim Backend');
+});
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
-
