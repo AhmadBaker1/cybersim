@@ -34,4 +34,44 @@ const signup = async (req, res) => {
   }
 };
 
-export { signup };
+const login = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // 1. Check if user exists
+        const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        const user = result.rows[0];
+
+        if (!user) {
+            return res.status(400).json({ error: 'User not found' });
+        }
+
+        // 2. Compare password
+
+        const isMatch = await bcrypt.compare(password, user.password_hash);
+        if (!isMatch) {
+            return res.status(400).json({ error: 'Invalid password' });
+        }
+
+        // 3. Create JWT token
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+            expiresIn: '1h',
+        });
+
+        // 4. Return the user info but without the password and token
+        res.status(200).json({
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                score: user.score,
+            },
+            token,
+        });
+    } catch (err) {
+        console.error('Login Error', err);
+        res.status(500).json({ error: 'Login failed' });
+    }
+};
+
+export { signup, login };
