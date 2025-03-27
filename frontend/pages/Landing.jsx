@@ -1,25 +1,16 @@
 import { Link } from "react-router-dom";
+import Navbar from "../src/components/Navbar";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-gray-950 text-white flex flex-col justify-between">
-      {/* Navbar */}
-      <nav className="flex justify-between items-center p-6">
-        <h1 className="text-2xl font-extrabold text-green-400">CyberSim</h1>
-        <Link
-          to="/login"
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-        >
-          Log In
-        </Link>
-      </nav>
+    <div className="w-full min-h-screen bg-gray-950 text-white overflow-x-hidden flex flex-col justify-between">
+      <Navbar />
 
-      {/* Hero Section */}
-      <div className="text-center px-6 flex-1 flex flex-col justify-center items-center">
+      <main className="flex-1 flex flex-col justify-center items-center px-6 text-center">
         <h2 className="text-4xl md:text-5xl font-bold mb-4">
           Train to Defend, Learn to Hack 🛡️
         </h2>
-        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-8">
+        <p className="text-lg md:text-xl text-gray-300 max-w-xl mb-8">
           CyberSim is an interactive cybersecurity training simulator. Learn how
           real-world attacks like SQL Injection work — then stop them.
         </p>
@@ -29,9 +20,8 @@ export default function Landing() {
         >
           Start Learning Now
         </Link>
-      </div>
+      </main>
 
-      {/* Footer */}
       <footer className="text-center text-sm text-gray-500 p-4">
         © {new Date().getFullYear()} CyberSim. For educational purposes only.
       </footer>

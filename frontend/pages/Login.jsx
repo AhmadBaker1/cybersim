@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Navbar from "../src/components/Navbar";
+
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -32,49 +34,52 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-950 text-white px-4">
-          <h1 className="text-3xl font-bold mb-6">Log In to CyberSim</h1>
+        <>
+          <Navbar />
+          <div className="min-h-screen flex flex-col items-center justify-center bg-gray-950 text-white px-4">
+            <h1 className="text-3xl font-bold mb-6">Log In to CyberSim</h1>
     
-          <form
-            onSubmit={handleLogin}
-            className="bg-gray-900 p-6 rounded-lg shadow-lg w-full max-w-sm space-y-4"
-          >
-            {error && (
-              <div className="text-red-500 font-semibold text-sm">{error}</div>
-            )}
-    
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            />
-    
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            />
-    
-            <button
-              type="submit"
-              className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded"
+            <form
+              onSubmit={handleLogin}
+              className="bg-gray-900 p-6 rounded-lg shadow-lg w-full max-w-sm space-y-4"
             >
-              Log In
-            </button>
+              {error && (
+                <div className="text-red-500 font-semibold text-sm">{error}</div>
+              )}
     
-            <p className="text-sm text-center mt-2">
-              Don’t have an account?{" "}
-              <Link to="/signup" className="text-green-400 hover:underline">
-                Sign up
-              </Link>
-            </p>
-          </form>
-        </div>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                required
+              />
+    
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                required
+              />
+    
+              <button
+                type="submit"
+                className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded"
+              >
+                Log In
+              </button>
+    
+              <p className="text-sm text-center mt-2">
+                Don’t have an account?{" "}
+                <Link to="/signup" className="text-green-400 hover:underline">
+                  Sign up
+                </Link>
+              </p>
+            </form>
+          </div>
+        </>
       );
     }
