@@ -47,4 +47,27 @@ router.post('/sql-injection', authMiddleware, async (req, res) => {
   }
 });
 
+// Mark challenge as complete
+router.post('/complete', authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+  const { challengeName } = req.body;
+
+  try {
+    // Insert only if not already completed
+    await pool.query(
+      `
+      INSERT INTO user_challenge_progress (user_id, challenge_name)
+      VALUES ($1, $2)
+      ON CONFLICT (user_id, challenge_name) DO NOTHING
+      `,
+      [userId, challengeName]
+    );
+
+    res.status(200).json({ message: 'Challenge marked as complete.' });
+  } catch (err) {
+    console.error('Error marking challenge complete:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;

@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
 import ctfRoutes from './routes/ctfRoutes.js';
+import sqlInjectionRoutes from './routes/sqlInjectionRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/challenges', ctfRoutes);
+app.use('/api/sql-injection', sqlInjectionRoutes);
 
 app.get('/', (req, res) => {
   res.send('Welcome to CyberSim Backend');
