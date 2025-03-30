@@ -57,13 +57,24 @@ export default function SqlInjectionChallenge() {
       
           const data = await response.json();
           console.log("Completion response:", data);
+
+          if (response.status === 400 && data.message === 'Challenge already completed') {
+            alert("⚠️ You've already completed this challenge.");
+            setIsCompleted(true);
+            return;
+          }
+
           const user = JSON.parse(localStorage.getItem("user"));
           user.score += data.points;
           localStorage.setItem("user", JSON.stringify(user));
 
-          
-      
-          setIsCompleted(true);
+          if (response.ok) {
+            setIsCompleted(true);
+            confetti({
+              particleCount: 150,
+              spread: 70,
+              origin: { y: 0.6 },
+            });
           alert("✅ Challenge marked as complete!");
           confetti({
             particleCount: 150,
@@ -71,6 +82,9 @@ export default function SqlInjectionChallenge() {
             origin: { y: 0.6 },
           });
           navigate("/challenge", { state: { refresh: true } });
+        } else {
+            throw new Error(data.message || "Something went wrong");
+        }
         } catch (err) {
           console.error("Failed to mark challenge as complete:", err);
           alert("❌ Something went wrong.");
@@ -127,7 +141,7 @@ export default function SqlInjectionChallenge() {
                         <button
                           onClick={(handleMarkComplete)}
                           disabled={isCompleted}
-                          className="mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl"
+                          className={`mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl ${isCompleted ? "opacity-50 cursor-not-allowed" : ""}`}
                         >
                           {isCompleted ? "Completed ✅" : "Mark as Complete"}
                         </button>

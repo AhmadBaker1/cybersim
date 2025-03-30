@@ -84,7 +84,7 @@ export default function ChallengeDashboard() {
                     key={challenge.id}
                     onClick={() => {
                       if (isUnlocked) {
-                        navigate(`/challenge/${challenge.name.toLowerCase().replace(/\s+/g, "-")}`);
+                        navigate(`/challenge/${challenge.vulnerability.toLowerCase().replace(/\s+/g, "-")}`);
                       }
                     }}
                     className={`cursor-pointer rounded-lg p-6 shadow-md text-white transition-transform hover:scale-105 ${
@@ -99,13 +99,19 @@ export default function ChallengeDashboard() {
                   >
                     <h3 className="text-xl font-bold">{challenge.name}</h3>
                     <p className="text-sm mt-1 opacity-90">{challenge.level}</p>
+                    <p className="text-xs mt-2 opacity-80">{challenge.description}</p>
                     {index === 0 && (
                       <span className="inline-block mt-3 text-xs font-semibold bg-white text-black px-3 py-1 rounded-full shadow">
                         🚀 Start Here
                       </span>
                     )}
                     <p className="text-sm mt-2">
-                      {challenge.completed ? "✅ Completed" : isUnlocked ? "🔓 Unlocked" : "🔒 Locked"}
+                    {challenge.completed 
+                      ? `✅ Completed on ${new Date(challenge.completed_at).toLocaleDateString()}`
+                      : challenge.unlocked 
+                      ?  "🟢 Ready to start"
+                      : "🔒 Locked"
+                      }
                     </p>
                   </div>
                 );

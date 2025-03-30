@@ -25,6 +25,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/challenges', ctfRoutes);
 app.use('/api/sql-injection', sqlInjectionRoutes);
 
+
 app.get('/', (req, res) => {
   res.send('Welcome to CyberSim Backend');
 });

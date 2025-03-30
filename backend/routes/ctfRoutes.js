@@ -4,11 +4,55 @@ import pool from '../db.js';
 
 const router = express.Router();
 
-router.get('/levels', authMiddleware, (req, res) => {
-  res.json([
-    { id: 1, name: 'SQL Injection', level: 'Easy' },
-    { id: 2, name: 'XSS Attack', level: 'Medium' },
-  ]);
+router.get('/levels', authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const result = await pool.query(`
+      SELECT 
+        c.id, 
+        c.name,
+        c.description, 
+        c.level, 
+        c.vulnerability, 
+        c.points,
+        cc.completed_at
+      FROM challenges c
+      LEFT JOIN completed_challenges cc 
+        ON c.name = cc.challenge_name AND cc.user_id = $1
+    `, [userId]);
+
+    const levels = result.rows.map(challenge => ({
+      id: challenge.id,
+      name: challenge.name,
+      description: challenge.description,
+      level: challenge.level,
+      vulnerability: challenge.vulnerability,
+      points: challenge.points,
+      completed: !!challenge.completed_at,
+      completed_at: challenge.completed_at
+    }));
+
+    const challenges = result.rows;
+
+    // Determine unlock status
+    const response = challenges.map((c, idx) => {
+      const isCompleted = !!c.completed_at;
+
+      // First challenge is always unlocked
+      if (idx === 0) return { ...c, completed: isCompleted, unlocked: true };
+
+      const prev = challenges[idx - 1];
+      const isUnlocked = !!prev.completed_at;
+
+      return { ...c, completed: isCompleted, unlocked: isUnlocked };
+    });
+
+    res.json(response);
+  } catch (err) {
+    console.error("Failed to fetch levels:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 // Vulnerable login challenge
