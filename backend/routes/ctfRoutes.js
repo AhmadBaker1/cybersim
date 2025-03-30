@@ -6,8 +6,8 @@ const router = express.Router();
 
 router.get('/levels', authMiddleware, (req, res) => {
   res.json([
-    { id: 1, name: 'SQL Injection', difficulty: 'Easy' },
-    { id: 2, name: 'XSS Attack', difficulty: 'Medium' },
+    { id: 1, name: 'SQL Injection', level: 'Easy' },
+    { id: 2, name: 'XSS Attack', level: 'Medium' },
   ]);
 });
 
@@ -49,21 +49,46 @@ router.post('/sql-injection', authMiddleware, async (req, res) => {
 
 // Mark challenge as complete
 router.post('/complete', authMiddleware, async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user.id
   const { challengeName } = req.body;
+  console.log("User marking complete:", userId);
 
   try {
-    // Insert only if not already completed
+    // 1. Get challenge details from DB
+    const challengeRes = await pool.query(
+      'SELECT * FROM challenges WHERE name = $1',
+      [challengeName]
+    );
+
+    if (challengeRes.rows.length === 0) {
+      return res.status(404).json({ error: 'Challenge not found' });
+    }
+
+    const challenge = challengeRes.rows[0];
+    const points = challenge.points;
+
+     // 2. Check if already completed
+     const completedCheck = await pool.query(
+      'SELECT * FROM completed_challenges WHERE user_id = $1 AND challenge_name = $2',
+      [userId, challengeName]
+    );
+    if (completedCheck.rows.length > 0) {
+      return res.status(400).json({ message: 'Challenge already completed' });
+    }
+
+    // 3. Update user score
     await pool.query(
-      `
-      INSERT INTO user_challenge_progress (user_id, challenge_name)
-      VALUES ($1, $2)
-      ON CONFLICT (user_id, challenge_name) DO NOTHING
-      `,
+      'UPDATE users SET score = score + $1 WHERE id = $2',
+      [challenge.points, userId]
+    );
+
+    // 4. Insert into completed_challenges
+    await pool.query(
+      'INSERT INTO completed_challenges (user_id, challenge_name) VALUES ($1, $2)',
       [userId, challengeName]
     );
 
-    res.status(200).json({ message: 'Challenge marked as complete.' });
+    res.json({ message: 'Challenge marked as complete', points: challenge.points });
   } catch (err) {
     console.error('Error marking challenge complete:', err);
     res.status(500).json({ error: 'Internal server error' });

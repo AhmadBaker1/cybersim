@@ -11,8 +11,8 @@ const PORT = process.env.PORT || 5000;
 
 
 const allowedOrigins = [
+  'https://cybersim.vercel.app',
   'http://localhost:5173',
-  'https://cybersim.vercel.app'
 ];
 
 app.use(cors({

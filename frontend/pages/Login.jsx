@@ -5,7 +5,7 @@ import Navbar from "../src/components/Navbar";
 
 
 export default function Login() {
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
@@ -15,8 +15,8 @@ export default function Login() {
 
         try {
             const res = await axios.post("http://localhost:5000/api/auth/login", {
-                email,
-                password,
+              username,
+              password,
             });
 
             const { user, token } = res.data;
@@ -29,6 +29,7 @@ export default function Login() {
             navigate("/challenge");
         } catch (err) {
             setError("Invalid credentials. Please try again.");
+            localStorage.removeItem("token");
             console.error(err);
         }
     };
@@ -48,10 +49,10 @@ export default function Login() {
               )}
     
               <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
                 required
               />

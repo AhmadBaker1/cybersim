@@ -20,6 +20,10 @@ export default function Signup() {
                 password,
             });
 
+            if (res.status === 201) {
+              navigate("/login"); // ✅ Redirect to login
+            }
+
             const { user, token } = res.data;
 
             // Save the token and user

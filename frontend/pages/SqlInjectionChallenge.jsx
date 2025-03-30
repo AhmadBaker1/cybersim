@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ChallengeNavbar from "../src/components/ChallengeNavbar";
+import confetti from "canvas-confetti";
 
 export default function SqlInjectionChallenge() {
     const [formData, setFormData] = useState({
@@ -38,24 +40,37 @@ export default function SqlInjectionChallenge() {
         setLoading(false);
     };
 
+    const navigate = useNavigate();
     const handleMarkComplete = async () => {
         const token = localStorage.getItem("token");
       
         try {
-          const response = await fetch('https://cybersim-backend.onrender.com/api/challenges/complete', {
+            //https://cybersim-backend.onrender.com/api/challenges/complete
+          const response = await fetch('http://localhost:5000/api/challenges/complete', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ challengeName: 'SQL Injection' }),
+            body: JSON.stringify({ challengeName: 'Login Bypass' }),
           });
       
           const data = await response.json();
           console.log("Completion response:", data);
+          const user = JSON.parse(localStorage.getItem("user"));
+          user.score += data.points;
+          localStorage.setItem("user", JSON.stringify(user));
+
+          
       
           setIsCompleted(true);
           alert("✅ Challenge marked as complete!");
+          confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+          });
+          navigate("/challenge", { state: { refresh: true } });
         } catch (err) {
           console.error("Failed to mark challenge as complete:", err);
           alert("❌ Something went wrong.");

@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 
 const authMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
+    
 
     // We want to check if the token exists
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -14,7 +15,7 @@ const authMiddleware = (req, res, next) => {
     try {
         // Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.userId = decoded.userId;
+        req.user = { id: decoded.userId };
         next(); //  Call the next middleware or route
     } catch (err) {
         console.error('Invalid token:', err);
