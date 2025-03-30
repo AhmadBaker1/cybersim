@@ -6,6 +6,8 @@ import ChallengeDashboard from '../pages/ChallengeDashboard';
 import Admin from '../pages/Admin';
 import SqlInjectionChallenge from '../pages/SqlInjectionChallenge';
 import XssAttackChallenge from '../pages/XssAttackChallenge';
+import JwtTokenChallenge from '../pages/jwtTokenChallenge';
+
 
 export default function App() {
   return (
@@ -17,6 +19,7 @@ export default function App() {
       <Route path="/admin" element={<Admin />} />
       <Route path="/challenge/sql-injection" element={<SqlInjectionChallenge />} />
       <Route path="/challenge/xss-attack" element={<XssAttackChallenge />}/>
+      <Route path="/challenge/jwt-token-manipulation" element={<JwtTokenChallenge />} />
     </Routes>
   );
 }

@@ -5,6 +5,7 @@ import authRoutes from './routes/authRoutes.js';
 import ctfRoutes from './routes/ctfRoutes.js';
 import sqlInjectionRoutes from './routes/sqlInjectionRoutes.js';
 import xssRoutes from './routes/xssRoutes.js';
+import jwtRoutes from './challenges/jwt/jwtRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -26,6 +27,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/challenges', ctfRoutes);
 app.use('/api/sql-injection', sqlInjectionRoutes);
 app.use('/api/xss', xssRoutes);
+app.use('/api/jwt', jwtRoutes);
 
 
 app.get('/', (req, res) => {
