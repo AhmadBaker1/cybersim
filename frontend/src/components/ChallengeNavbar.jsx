@@ -82,12 +82,15 @@ export default function ChallengeNavbar() {
           >
             🏆 Leaderboard
           </Link>
-          <Link
-            onClick={handleLogout}
-            className="block text-red-300 hover:text-red-500 transition"
+          <button
+            onClick={() => {
+            handleLogout();
+            setIsOpen(false); // close menu on mobile
+          }}
+          className="block w-full text-left text-red-300 hover:text-red-500 transition"
           >
             Logout
-          </Link>
+          </button>
         </div>
       )}
     </nav>
