@@ -10,6 +10,7 @@ export default function SqlInjectionChallenge() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [alreadyCompleted, setAlreadyCompleted] = useState(false)
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -63,6 +64,12 @@ export default function SqlInjectionChallenge() {
       const user = JSON.parse(localStorage.getItem("user"));
       user.score += data.points;
       localStorage.setItem("user", JSON.stringify(user));
+
+      if (response.status === 400 && data.message === "Challenge already completed") {
+        setIsCompleted(true);
+        setAlreadyCompleted(true);
+        return;
+      }
 
       if (response.ok) {
         setIsCompleted(true);
@@ -166,12 +173,19 @@ export default function SqlInjectionChallenge() {
                       >
                         {isCompleted ? "Completed ✅" : "Mark as Complete"}
                       </button>
-                      {isCompleted && (
+                      {isCompleted && !alreadyCompleted && (
                         <div className="mt-4 p-4 bg-green-900 border border-green-500 rounded text-center text-green-300 animate-fade-in">
                             🎉 <strong>Challenge marked as complete!</strong><br />
                             XP has been added to your profile.
                         </div>
                         )}
+
+                        {alreadyCompleted && (
+                            <div className="mt-4 p-4 bg-yellow-900 border border-yellow-500 rounded text-center text-yellow-300 animate-fade-in">
+                                ⚠️ <strong>Challenge was already completed.</strong><br />
+                                    No XP added, but you're still awesome 😎
+                            </div>
+                    )}
 
                     </div>
                   )}
