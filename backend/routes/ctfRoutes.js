@@ -59,7 +59,7 @@ router.get('/levels', authMiddleware, async (req, res) => {
 
 router.post('/sql-injection', authMiddleware, async (req, res) => {
   const { username, password } = req.body;
-  const userId = req.userId;
+  const userId = req.user.id;
 
   // This is an intentional vulnerable SQL
   const query = `SELECT * FROM fake_users WHERE username = '${username}'`;

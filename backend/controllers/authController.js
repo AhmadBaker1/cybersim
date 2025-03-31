@@ -3,13 +3,13 @@ import jwt from 'jsonwebtoken';
 import pool from '../db.js';
 
 const signup = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
-    // 1. Check if user exists
-    const userCheck = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    // 1. Check if user already exists (by username)
+    const userCheck = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
     if (userCheck.rows.length > 0) {
-      return res.status(400).json({ error: 'Email already registered' });
+      return res.status(400).json({ error: 'Username already taken' });
     }
 
     // 2. Hash password
@@ -18,12 +18,12 @@ const signup = async (req, res) => {
 
     // 3. Insert new user
     const newUser = await pool.query(
-      'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id, username, email',
-      [username, email, password_hash]
+      'INSERT INTO users (username, password_hash) VALUES ($1, $2, $3) RETURNING id, username',
+      [username, password_hash]
     );
 
     // 4. Generate token
-    const token = jwt.sign({ userId: newUser.rows[0].id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: newUser.rows[0].id }, process.env.JWT_SECRET, {
       expiresIn: '12h',
     });
 
@@ -53,7 +53,7 @@ const login = async (req, res) => {
       }
 
       // 3. Create JWT token
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
           expiresIn: '1h',
       });
 
@@ -74,9 +74,10 @@ const login = async (req, res) => {
 };
 
 const getProfile = async (req, res) => {
+  console.log("Fetching profile for user ID:", req.user?.id);
     try {
       const result = await pool.query(
-        'SELECT id, username, email, score FROM users WHERE id = $1',
+        'SELECT id, username, score FROM users WHERE id = $1',
         [req.user.id] // from token middleware
       );
   
