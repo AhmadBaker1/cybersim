@@ -55,11 +55,6 @@ export default function SqlInjectionChallenge() {
       const data = await response.json();
       console.log("Completion response:", data);
 
-      if (response.status === 400 && data.message === "Challenge already completed") {
-        alert("⚠️ You've already completed this challenge.");
-        setIsCompleted(true);
-        return;
-      }
 
       const user = JSON.parse(localStorage.getItem("user"));
       user.score += data.points;
