@@ -2,98 +2,87 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../src/components/Navbar";
+import MatrixRain from "../src/components/MatrixRain";
+import { API_BASE_URL } from "../src/config";
 
 export default function Signup() {
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-    const handleSignup = async (e) => {
-        e.preventDefault();
+  const handleSignup = async (e) => {
+    e.preventDefault();
 
-        try {
-            const res = await axios.post("http://localhost:5000/api/auth/signup", {
-                username,
-                email,
-                password,
-            });
+    try {
+      const res = await axios.post(`${API_BASE_URL}/api/auth/signup`, {
+        username,
+        password,
+      });
 
-            if (res.status === 201) {
-              navigate("/login"); // ✅ Redirect to login
-            }
+      const { user, token } = res.data;
 
-            const { user, token } = res.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
-            // Save the token and user
-            localStorage.setItem("token", token);
-            localStorage.setItem("user", JSON.stringify(user));
+      navigate("/challenge");
+    } catch (err) {
+      setError("Username may already exist or input is invalid.");
+      console.error(err);
+    }
+  };
 
-            // Redirect to the dashboard
-            navigate("/challenge");
-        }
-        catch (err) {
-            setError("Signup failed. Please try again.");
-            console.error(err);
-        }
-    };
-
-    return (
+  return (
     <>
       <Navbar />
-      <div className="pt-23 min-h-screen flex flex-col items-center justify-center bg-gray-950 text-white px-4">
-        <h1 className="text-3xl font-bold mb-6">Create Your CyberSim Account</h1>
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4 py-16 text-white relative overflow-hidden">
+        <MatrixRain />
 
-        <form
-          onSubmit={handleSignup}
-          className="bg-gray-900 p-6 rounded-lg shadow-lg w-full max-w-sm space-y-4"
-        >
-          {error && (
-            <div className="text-red-500 font-semibold text-sm">{error}</div>
-          )}
+        <div className="relative z-10 w-full max-w-md bg-black bg-opacity-40 backdrop-blur-md border border-lime-400 rounded-2xl p-8 shadow-xl animate-fade-in">
+          <h1 className="text-3xl font-extrabold text-center mb-6 text-lime-400 tracking-wide ">
+            Sign Up for CyberSim
+          </h1>
 
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-            required
-          />
+          <form onSubmit={handleSignup} className="space-y-4">
+            {error && (
+              <div className="bg-red-800 text-red-200 text-sm px-4 py-2 rounded font-mono border border-red-500">
+                {error}
+              </div>
+            )}
 
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-            required
-          />
+            <input
+              type="text"
+              placeholder="Choose a username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-700 placeholder-gray-500 text-lime-300 focus:ring-2 focus:ring-lime-500 outline-none font-mono"
+              required
+            />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-            required
-          />
+            <input
+              type="password"
+              placeholder="Create a password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 rounded-xl bg-gray-900 border border-gray-700 placeholder-gray-500 text-lime-300 focus:ring-2 focus:ring-lime-500 outline-none font-mono"
+              required
+            />
 
-          <button
-            type="submit"
-            className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded"
-          >
-            Sign Up
-          </button>
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-lime-500 to-green-400 hover:from-lime-600 hover:to-green-500 text-black font-bold py-3 rounded-xl transition"
+            >
+              ✨ Create Account
+            </button>
+          </form>
 
-          <p className="text-sm text-center mt-2">
+          <p className="text-sm text-center mt-6 text-gray-400">
             Already have an account?{" "}
-            <Link to="/login" className="text-green-400 hover:underline">
-              Log in
+            <Link to="/login" className="text-lime-400 hover:underline">
+              Log in here
             </Link>
           </p>
-        </form>
+        </div>
       </div>
     </>
   );

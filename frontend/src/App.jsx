@@ -7,6 +7,8 @@ import Admin from '../pages/Admin';
 import SqlInjectionChallenge from '../pages/SqlInjectionChallenge';
 import XssAttackChallenge from '../pages/XssAttackChallenge';
 import JwtTokenChallenge from '../pages/jwtTokenChallenge';
+import LeaderboardPage from '../pages/LeaderboardPage';
+import PrivateRoute from './components/PrivateRoute';
 
 
 export default function App() {
@@ -15,11 +17,16 @@ export default function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/challenge" element={<ChallengeDashboard />} />
+      <Route path="/challenge" element={
+        <PrivateRoute>
+          <ChallengeDashboard />
+        </PrivateRoute>
+        }/>
       <Route path="/admin" element={<Admin />} />
       <Route path="/challenge/sql-injection" element={<SqlInjectionChallenge />} />
       <Route path="/challenge/xss-attack" element={<XssAttackChallenge />}/>
       <Route path="/challenge/jwt-token-manipulation" element={<JwtTokenChallenge />} />
+      <Route path="/leaderboard" element={<LeaderboardPage />} />
     </Routes>
   );
 }
