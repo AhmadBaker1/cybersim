@@ -9,10 +9,12 @@ import XssAttackChallenge from '../pages/XssAttackChallenge';
 import JwtTokenChallenge from '../pages/jwtTokenChallenge';
 import LeaderboardPage from '../pages/LeaderboardPage';
 import PrivateRoute from './components/PrivateRoute';
+import { API_BASE_URL } from './config.js';
 
 
 export default function App() {
   return (
+    console.log("API BASE:", API_BASE_URL),
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
