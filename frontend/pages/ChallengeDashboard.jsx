@@ -6,7 +6,7 @@ import MatrixRain from "../src/components/MatrixRain";
 import ChallengeCard from "../src/components/ChallengeCard";
 import Leaderboard from "../src/components/Leaderboard";
 import ChallengeNavbar from "../src/components/ChallengeNavbar";
-import { API_BASE_URL } from "../src/config";
+import { API_BASE_URL } from "../src/config.js";
 
 
 export default function ChallengeDashboard() {

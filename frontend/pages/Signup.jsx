@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../src/components/Navbar";
 import MatrixRain from "../src/components/MatrixRain";
-import { API_BASE_URL } from "../src/config";
+import { API_BASE_URL } from "../src/config.js";
 
 export default function Signup() {
   const [username, setUsername] = useState("");

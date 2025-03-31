@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ChallengeNavbar from "../src/components/ChallengeNavbar";
 import confetti from "canvas-confetti";
 import TypingHints from "../src/components/TypingHints";
-import { API_BASE_URL } from "../src/config";
+import { API_BASE_URL } from "../src/config.js";
 
 export default function SqlInjectionChallenge() {
   const [formData, setFormData] = useState({ username: "", password: "" });

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import confetti from "canvas-confetti";
 import ChallengeNavbar from "../src/components/ChallengeNavbar";
-import { API_BASE_URL } from "../src/config";
+import { API_BASE_URL } from "../src/config.js";
 
 // Optional TypingHints Component (included below)
 function TypingHints({ hints }) {
