@@ -49,5 +49,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+router.get("/profile", authMiddleware, getProfile);
+
 
 export default router;
