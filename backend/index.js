@@ -34,6 +34,12 @@ app.get('/', (req, res) => {
   res.send('Welcome to CyberSim Backend');
 });
 
+// Health check route for uptime pings
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
